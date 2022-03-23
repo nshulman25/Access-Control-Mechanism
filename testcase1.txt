@@ -1,0 +1,37 @@
+useradd root ya84*_o
+login root ya84*_o
+useradd alice Wvu_4_Life
+useradd bob SHHHsecret
+groupadd students
+usergrp alice students
+usergrp bob students
+useradd tom geek_247
+logout
+login alice Wvu_4_Life
+mkfile file1.txt
+write file1.txt Text from Alice in file1
+mkfile file2.txt
+write file2.txt Text from Alice in file2
+chmod file2.txt rw- rw- r--
+chgrp file2.txt students
+logout
+login tom geek_247
+read file1.txt
+read file2.txt
+write file2.txt Text from Tom in file2
+login bob SHHsecret
+logout
+login bob SHHsecret
+login bob SHHHsecret
+write file2.txt Text from Bob in file2
+read file2.txt
+logout
+login root ya84*_o
+chown file1.txt tom
+ls file1.txt
+logout
+login tom geek_247
+write file1.txt Text from Tom in file1
+read file1.txt
+logout
+end

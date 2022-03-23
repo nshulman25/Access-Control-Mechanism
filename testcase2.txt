@@ -1,0 +1,36 @@
+useradd root @r00t(705)
+login root @r00t(705)
+useradd steveo d@man^304
+useradd rita #101'holla!
+groupadd testers
+useradd steveo tada043.,;
+logout
+login steve d@man^304
+login steveo d@man^304
+mkfile script
+write script echo Hello World!
+chmod script -wx rw- --x
+chmod script2 rwx rwx rwx
+chgrp script testers
+execute script
+logout
+ls script
+login root @r00t(705)
+useradd rita #101'holla!
+chgrp script testers
+groupadd testers
+usergrp rita testers
+usergrp steveo testers
+chown script3 rita
+execute script
+logout
+login rita #101'holla!
+mkfile script
+write script echo Hello World!
+read script
+execute script
+groupadd developers
+useradd stew awwShucks
+logout
+end
+
