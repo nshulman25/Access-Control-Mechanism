@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import sys
 
+open("accounts.txt", "w").close()
+
+users = []
+current_user = [0]
 
 # Loops through the user specified file line by line and adds each line to a list. 
 file  = sys.argv[1]
@@ -10,13 +14,37 @@ with open(file) as f:
 
 # adds new user 
 def useradd(username, password):
-	pass
+	if not users and username=="root":
+		f = open("accounts.txt" ,"a")
+		f.write(username + " " + password+ "\n")
+		f.close()
+		users.append(username)
+	elif current_user[0] == "root":
+		f = open("accounts.txt" ,"a")
+		f.write(username + " " + password+ "\n")
+		f.close()
+		users.append(username)
+	else:
+		print("Only the root user can add new users!")	
+	
+	
 
 def login(username, password):
-	pass
-	
+	if current_user[0]:
+		print("The current user must be logged out before you can login!")
+	else:
+		with open("accounts.txt") as f:
+			accounts = []
+			accounts = f.readlines()
+			for line in accounts:
+				user = line.split()
+				if(user[0]==username and user[1]==password):
+					current_user[0] = username
+					print(current_user[0])
+				else:
+					print("username or password is wrong!")
 def logout():
-	pass
+	current_user[0] = ""
 
 def groupadd(groupname):
 	pass
@@ -56,47 +84,46 @@ def end():
 count = 0
 for line in lines:
 	command = line.split()
-	print(command)
-	
+
 	if(command[0] == "useradd"):
-		print("useradd")
+		useradd(command[1], command[2])
 		
 	if(command[0] == "login"):
-		print("login")	
+		login(command[1], command[2])
 		
 	if(command[0] == "logout"):
-		print("logout")
+		pass
 		
 	if(command[0] == "groupadd"):
-		print("groupadd")
+		pass
 		
 	if(command[0] == "usergrp"):
-		print("usergrp")
+		pass
 		
 	if(command[0] == "mkfile"):
-		print("mkfile")	
+		pass
 		
 	if(command[0] == "chmod"):
-		print("chmod")
+		pass
 		
 	if(command[0] == "chown"):
-		print("chown")	
+		pass
 		
 	if(command[0] == "chgrp"):
-		print("chgrp")
+		pass
 		
 	if(command[0] == "read"):
-		print("read")	
+		pass	
 		
 	if(command[0] == "write"):
-		print("write")
+		pass
 		
 	if(command[0] == "execute"):
-		print("execute")
+		pass
 		
 	if(command[0] == "ls"):
-		print("ls")
+		pass
 		
 	if(command[0] == "end"):
-		print("end")	
+		pass	
 	
