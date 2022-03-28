@@ -92,38 +92,38 @@ for line in lines:
 		login(command[1], command[2])
 		
 	if(command[0] == "logout"):
-		pass
+		logout()
 		
 	if(command[0] == "groupadd"):
-		pass
+		groupadd(command[1])
 		
 	if(command[0] == "usergrp"):
-		pass
+		usergrp(command[1], command[2])
 		
 	if(command[0] == "mkfile"):
-		pass
+		mkfile(command[1])
 		
 	if(command[0] == "chmod"):
-		pass
+		chmod(command[1], command[2], command[3], command[4])
 		
 	if(command[0] == "chown"):
-		pass
+		chown(command[1], command[2])
 		
 	if(command[0] == "chgrp"):
-		pass
+		chgrp(command[1], command[2])
 		
 	if(command[0] == "read"):
-		pass	
+		read(command[1])	
 		
 	if(command[0] == "write"):
-		pass
+		write(command[1], command[2])
 		
 	if(command[0] == "execute"):
-		pass
+		execute(command[1])	
 		
 	if(command[0] == "ls"):
-		pass
+		ls(command[1])
 		
 	if(command[0] == "end"):
-		pass	
+		end(command[1])	
 	
