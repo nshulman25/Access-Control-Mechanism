@@ -122,8 +122,8 @@ def mkfile(filename):
 			audit("files.txt is a reserved filename")			
 		else:
 			files[filename] = [current_user[0], "nil", "rw-", "---", "---"]
-			#f = open(filename ,"a")
-			#f.close()
+			f = open(filename ,"a")
+			f.close()
 			audit("file " + filename + " created")
 	else:
 		audit("A user must be signed in to create a file")
@@ -170,7 +170,9 @@ def chmod(filename, owner, group, others):
 	else:
 		audit("A user must be signed in to modify a file")
 
-			
+
+# changes the owner of the specified file
+# changes can only be made by root
 def chown(filename, username):
 	if current_user[0] == "root":
 		if username in users:
@@ -188,7 +190,10 @@ def chown(filename, username):
 			audit(username + " does not exsist")		
 	else:
 		audit("Only the root user can change file owners")
-		
+
+# changes the group associated with the specified file
+# changes can only be made by root or the owner of the file
+# the owner must be a member of the group they are adding the file too	
 def chgrp(filename, groupname):
 	if current_user[0] != "":
 		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
@@ -212,18 +217,122 @@ def chgrp(filename, groupname):
 	else:
 		audit("A user must be signed in to modify a file")
 
-
+# reads the specified file and displays it if the user has the proper permissions
 def read(filename):
-	pass
+	if current_user[0] != "":
+		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+			if filename in files:
+				if current_user[0] == "root":
+					audit("Displaying " + filename)
+					with open(filename, 'r') as f:
+   						audit(f.read())
+				elif current_user[0] == files[filename][0] and files[filename][2][0] == "r":
+					audit("Displaying " + filename)
+					with open(filename, 'r') as f:
+   						audit(f.read())
+				elif current_user[0] != files[filename][0] and files[filename][3][0] == "r":
+					if files[filename][1] == "nil":
+						audit("Displaying " + filename)
+						with open(filename, 'r') as f:
+   							audit(f.read())
+					elif current_user[0] in groups[files[filename][1]]:
+						audit("Displaying " + filename)
+						with open(filename, 'r') as f:
+   							audit(f.read())
+					else:
+						audit("You are not a member of " + files[filename][1])
+				elif current_user[0] != files[filename][0] and files[filename][4][0] == "r":
+					audit("Displaying " + filename)
+					with open(filename, 'r') as f:
+   						audit(f.read())
+				else:
+					audit("Access Denied")		
+			else:
+				audit("That file does not exsist")
+		else:
+			audit("You can not read the " + filename + " file")
+	else:
+		audit("A user must be signed in to read a file")
 
 def write(filename, text):
-	pass
+	if current_user[0] != "":
+		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+			if filename in files:
+				if current_user[0] == "root":
+					audit("Writing " + text + "to " + filename)
+					f = open(filename, "a")
+					f.write(text)
+					f.close()
+				elif current_user[0] == files[filename][0] and files[filename][2][1] == "w":
+					audit("Writing " + text + "to " + filename)
+					f = open(filename, "a")
+					f.write(text )
+					f.close()
+				elif current_user[0] != files[filename][0] and files[filename][3][1] == "w":
+					if files[filename][1] == "nil":
+						audit("Writing " + text + "to " + filename)
+						f = open(filename, "a")
+						f.write(text)
+						f.close()
+					elif current_user[0] in groups[files[filename][1]]:
+						audit("Writing " + text + "to " + filename)
+						f = open(filename, "a")
+						f.write(text)
+						f.close()
+					else:
+						audit("You are not a member of " + files[filename][1])
+				elif current_user[0] != files[filename][0] and files[filename][4][1] == "w":
+					audit("Writing " + text + "to " + filename)
+					f = open(filename, "a")
+					f.write(text)
+					f.close()
+				else:
+					audit("Access Denied")		
+			else:
+				audit("That file does not exsist")
+		else:
+			audit("You can not write to the " + filename + " file")
+	else:
+		audit("A user must be signed in to write to a file")
 
 def execute(filename):
-	pass
-	
+	if current_user[0] != "":
+		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+			if filename in files:
+				if current_user[0] == "root":
+					audit(filename + " executed successfully")
+				elif current_user[0] == files[filename][0] and files[filename][2][2] == "x":
+					audit(filename + " executed successfully")
+				elif current_user[0] != files[filename][0] and files[filename][3][2] == "x":
+					if files[filename][1] == "nil":
+						audit(filename + " executed successfully")
+					elif current_user[0] in groups[files[filename][1]]:
+						audit(filename + " executed successfully")
+					else:
+						audit("You are not a member of " + files[filename][1])
+				elif current_user[0] != files[filename][0] and files[filename][4][2] == "x":
+					audit(filename + " executed successfully")
+				else:
+					audit("Access Denied")		
+			else:
+				audit("That file does not exsist")
+		else:
+			audit("You can not write to the " + filename + " file")
+	else:
+		audit("A user must be signed in to write to a file")
+
+# displays owner, group, and permissions for a file
 def ls(filename):
-	pass
+	if current_user[0] != "":
+		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+			if filename in files:
+				audit(filename + ": " + " ".join(files[filename]))
+			else:
+				audit("That file does not exsist")
+		else:
+			audit("You can not view the " + filename + " file")
+	else:
+		audit("A user must be signed in to view a file")
 
 def end():
 	audit("Ending session")
@@ -308,7 +417,8 @@ for line in lines:
 		read(command[1])	
 		
 	if(command[0] == "write"):
-		write(command[1], command[2])
+		write_text = line.split(" ",1)
+		write(command[1], write_text[1])
 		
 	if(command[0] == "execute"):
 		execute(command[1])	
@@ -318,4 +428,3 @@ for line in lines:
 		
 	if(command[0] == "end"):
 		end()	
-	
