@@ -133,9 +133,9 @@ def mkfile(filename):
 # permisons formated as "rwx" or "---"
 def chmod(filename, owner, group, others):
 	if current_user[0] != "":
-		if current_user[0] == "root" or current_user[0] == files[filename][0]: 
-			if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
-				if filename in files:
+		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+			if filename in files:
+				if current_user[0] == "root" or current_user[0] == files[filename][0]: 
 					tempgroup = files[filename][1]
 
 					if len(owner) !=3 or len(group) !=3 or len(others) !=3:
@@ -162,11 +162,11 @@ def chmod(filename, owner, group, others):
 						files[filename] = [current_user[0], tempgroup, owner, group, others]
 						audit(filename + " permission have been changed")
 				else:
-					audit("That file does not exsist")
+					audit("You do not have permission to access this file")
 			else:
-				audit("You can not modify the " + filename + " file")
+				audit("That file does not exsist")
 		else:
-			audit("You do not have permission to access this file")
+			audit("You can not modify the " + filename + " file")
 	else:
 		audit("A user must be signed in to modify a file")
 
@@ -191,9 +191,9 @@ def chown(filename, username):
 		
 def chgrp(filename, groupname):
 	if current_user[0] != "":
-		if current_user[0] == "root" or current_user[0] == files[filename][0]: 
-			if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
-				if filename in files:
+		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+			if filename in files:
+				if current_user[0] == "root" or current_user[0] == files[filename][0]: 
 					if groupname in groups:
 						if current_user[0] == "root" or current_user[0] in groups[groupname]:
 
@@ -204,11 +204,11 @@ def chgrp(filename, groupname):
 					else:
 						audit(groupname + " is not a group")	
 				else:
-					audit("That file does not exsist")
+					audit("You do not have permission to access this file")
 			else:
-				audit("You can not modify the " + filename + " file")
+				audit("That file does not exsist")
 		else:
-			audit("You do not have permission to access this file")
+			audit("You can not modify the " + filename + " file")
 	else:
 		audit("A user must be signed in to modify a file")
 
