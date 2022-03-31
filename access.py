@@ -128,42 +128,90 @@ def mkfile(filename):
 	else:
 		audit("A user must be signed in to create a file")
 
-	
+# changes the permssions of the specified file
+# changes can only be made by the owner or root
+# permisons formated as "rwx" or "---"
 def chmod(filename, owner, group, others):
-	tempgroup = files[filename][1]
-	if filename in files:
-		
-		if len(owner) !=3 or len(group) !=3 or len(others) !=3:
-			audit("access permission can only be 3 chars")
-		elif owner[0] != "r" and owner[0] != "-":
-			audit("the first letter of a permission must be \"r\" or \"-\"")
-		elif group[0] != "r" and group[0] != "-":
-			audit("the first letter of a permission must be \"r\" or \"-\"")
-		elif others[0] != "r" and others[0] != "-":
-			audit("the first letter of a permission must be \"r\" or \"-\"")
-		elif owner[1] != "w" and owner[1] != "-":
-			audit("the second letter of a permission must be \"w\" or \"-\"")
-		elif group[1] != "w" and group[1] != "-":
-			audit("the second letter of a permission must be \"w\" or \"-\"")
-		elif others[1] != "w" and others[1] != "-":
-			audit("the second letter of a permission must be \"w\" or \"-\"")
-		elif owner[2] != "x" and owner[2] != "-":
-			audit("the third letter of a permission must be \"x\" or \"-\"")
-		elif group[2] != "x" and group[2] != "-":
-			audit("the third letter of a permission must be \"x\" or \"-\"")
-		elif others[2] != "x" and others[2] != "-":
-			audit("the third letter of a permission must be \"x\" or \"-\"")
+	if current_user[0] != "":
+		if current_user[0] == "root" or current_user[0] == files[filename][0]: 
+			if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+				if filename in files:
+					tempgroup = files[filename][1]
+
+					if len(owner) !=3 or len(group) !=3 or len(others) !=3:
+						audit("access permission can only be 3 chars")
+					elif owner[0] != "r" and owner[0] != "-":
+						audit("the first letter of a permission must be \"r\" or \"-\"")
+					elif group[0] != "r" and group[0] != "-":
+						audit("the first letter of a permission must be \"r\" or \"-\"")
+					elif others[0] != "r" and others[0] != "-":
+						audit("the first letter of a permission must be \"r\" or \"-\"")
+					elif owner[1] != "w" and owner[1] != "-":
+						audit("the second letter of a permission must be \"w\" or \"-\"")
+					elif group[1] != "w" and group[1] != "-":
+						audit("the second letter of a permission must be \"w\" or \"-\"")
+					elif others[1] != "w" and others[1] != "-":
+						audit("the second letter of a permission must be \"w\" or \"-\"")
+					elif owner[2] != "x" and owner[2] != "-":
+						audit("the third letter of a permission must be \"x\" or \"-\"")
+					elif group[2] != "x" and group[2] != "-":
+						audit("the third letter of a permission must be \"x\" or \"-\"")
+					elif others[2] != "x" and others[2] != "-":
+						audit("the third letter of a permission must be \"x\" or \"-\"")
+					else:
+						files[filename] = [current_user[0], tempgroup, owner, group, others]
+						audit(filename + " permission have been changed")
+				else:
+					audit("That file does not exsist")
+			else:
+				audit("You can not modify the " + filename + " file")
+		else:
+			audit("You do not have permission to access this file")
 	else:
-		print("That file does not exsist or is not editable")	
-	
-	files[filename] = [current_user[0], tempgroup, owner, group, others]
-	print(files[filename])
+		audit("A user must be signed in to modify a file")
 
+			
 def chown(filename, username):
-	pass		
+	if current_user[0] == "root":
+		if username in users:
+			if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+				if filename in files:
 
+					files[filename][0] = username
+					audit(filename + " owner has been changed")
+
+				else:
+					audit("That file does not exsist")
+			else:
+				audit("You can not modify the " + filename + " file")
+		else:
+			audit(username + " does not exsist")		
+	else:
+		audit("Only the root user can change file owners")
+		
 def chgrp(filename, groupname):
-	pass
+	if current_user[0] != "":
+		if current_user[0] == "root" or current_user[0] == files[filename][0]: 
+			if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
+				if filename in files:
+					if groupname in groups:
+						if current_user[0] == "root" or current_user[0] in groups[groupname]:
+
+							files[filename][1] = groupname
+							audit(filename + " group has been changed")
+						else:
+							audit(current_user[0] + " can only change the group to one they are a member of")		
+					else:
+						audit(groupname + " is not a group")	
+				else:
+					audit("That file does not exsist")
+			else:
+				audit("You can not modify the " + filename + " file")
+		else:
+			audit("You do not have permission to access this file")
+	else:
+		audit("A user must be signed in to modify a file")
+
 
 def read(filename):
 	pass
