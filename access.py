@@ -352,8 +352,6 @@ def end():
 			f.write("\n")	
 	f.close()
 	
-	break
-	
 	
 # password check
 def passwordcheck(password):
@@ -430,6 +428,7 @@ for line in lines:
 		
 	if(command[0] == "end"):
 		end()
+		break
 	
 	else:
 		audit("uknown command")
