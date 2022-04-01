@@ -223,26 +223,26 @@ def read(filename):
 		if filename != "audits.txt" and filename != "accounts.txt" and filename != "groups.txt" and filename != "files.txt":
 			if filename in files:
 				if current_user[0] == "root":
-					audit("Displaying " + filename)
+					audit("Displaying " + filename + "\n")
 					with open(filename, 'r') as f:
    						audit(f.read())
 				elif current_user[0] == files[filename][0] and files[filename][2][0] == "r":
-					audit("Displaying " + filename)
+					audit("Displaying " + filename + "\n")
 					with open(filename, 'r') as f:
    						audit(f.read())
 				elif current_user[0] != files[filename][0] and files[filename][3][0] == "r":
 					if files[filename][1] == "nil":
-						audit("Displaying " + filename)
+						audit("Displaying " + filename + "\n")
 						with open(filename, 'r') as f:
    							audit(f.read())
 					elif current_user[0] in groups[files[filename][1]]:
-						audit("Displaying " + filename)
+						audit("Displaying " + filename + "\n")
 						with open(filename, 'r') as f:
    							audit(f.read())
 					else:
 						audit("You are not a member of " + files[filename][1])
 				elif current_user[0] != files[filename][0] and files[filename][4][0] == "r":
-					audit("Displaying " + filename)
+					audit("Displaying " + filename + "\n")
 					with open(filename, 'r') as f:
    						audit(f.read())
 				else:
@@ -383,52 +383,52 @@ for line in lines:
 		else:
 			useradd(command[1], command[2])
 		
-	if(command[0] == "login"):
+	elif(command[0] == "login"):
 		login(command[1], command[2])
 		
-	if(command[0] == "logout"):
+	elif(command[0] == "logout"):
 		logout()
 		
-	if(command[0] == "groupadd"):
+	elif(command[0] == "groupadd"):
 		if namecheck(command[1]) == 1:
 			break
 		else:
 			groupadd(command[1])
 		
-	if(command[0] == "usergrp"):
+	elif(command[0] == "usergrp"):
 		usergrp(command[1], command[2])
 		
-	if(command[0] == "mkfile"):
+	elif(command[0] == "mkfile"):
 		if namecheck(command[1]) == 1:
 			break
 		else:
 			mkfile(command[1])
 		
-	if(command[0] == "chmod"):
+	elif(command[0] == "chmod"):
 		chmod(command[1], command[2], command[3], command[4])
 		
-	if(command[0] == "chown"):
+	elif(command[0] == "chown"):
 		chown(command[1], command[2])
 		
-	if(command[0] == "chgrp"):
+	elif(command[0] == "chgrp"):
 		chgrp(command[1], command[2])
 		
-	if(command[0] == "read"):
+	elif(command[0] == "read"):
 		read(command[1])	
 		
-	if(command[0] == "write"):
+	elif(command[0] == "write"):
 		write_text = line.split(" ",1)
 		write(command[1], write_text[1])
 		
-	if(command[0] == "execute"):
+	elif(command[0] == "execute"):
 		execute(command[1])	
 		
-	if(command[0] == "ls"):
+	elif(command[0] == "ls"):
 		ls(command[1])
 		
-	if(command[0] == "end"):
+	elif(command[0] == "end"):
 		end()
 		break
-	
 	else:
 		audit("uknown command")
+
